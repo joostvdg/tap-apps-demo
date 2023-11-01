@@ -1,0 +1,29 @@
+apiVersion: carto.run/v1alpha1
+kind: Workload
+metadata:
+  name: weatherforecast
+  namespace: cyan
+  labels:
+    apps.tanzu.vmware.com/workload-type: web
+    apps.tanzu.vmware.com/has-tests: "true"
+    app.kubernetes.io/part-of: weatherforecast
+spec:
+  params:
+  - name: annotations
+    value:
+      autoscaling.knative.dev/minScale: "1"
+  - name: gitops_ssh_secret
+    value: gitops-ssh
+  - name: gitops_team
+    value: cyan
+  - name: gitops_env #! the next environment
+    value: staging
+  - name: buildServiceBindings
+    value:
+      - kind: Secret
+        name: nuget-config
+  source:
+    git:
+      url: http://gitlab.services.mydomain.com/root/weatherforecast.git
+      ref:
+        branch: main

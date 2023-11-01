@@ -1,0 +1,48 @@
+apiVersion: carto.run/v1alpha1
+kind: Deliverable
+metadata:
+  name: go-demo
+  labels:
+    app.kubernetes.io/part-of: go-demo
+    apps.tanzu.vmware.com/auto-configure-actuators: "true"
+    apps.tanzu.vmware.com/has-tests: "true"
+    apps.tanzu.vmware.com/workload-type: helm
+    kustomize.toolkit.fluxcd.io/name: teal
+    kustomize.toolkit.fluxcd.io/namespace: apps
+    app.kubernetes.io/component: deliverable
+    app.tanzu.vmware.com/deliverable-type: helm
+    carto.run/cluster-template-name: external-deliverable-template
+    carto.run/resource-name: deliverable
+    carto.run/template-lifecycle: mutable
+    carto.run/workload-name: go-demo
+    carto.run/workload-namespace: teal
+spec:
+  params:
+    - name: chart
+      value: go-demo
+    - name: chartVersion
+      value: "0.2.1"
+    - name: helmRepo
+      value: team-teal
+    - name: helmRepoNamespace
+      value: teal
+    - name: valuesConfigMap
+      value: go-demo-values
+  source:
+    image: harbor.services.mydomain.com/tap-apps/go-demo:1.1.0
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: go-demo-values
+data:
+  values.yaml: |
+    httpproxy:
+      enabled: true
+      fqdn: go-demo.teal.run-01.mydomain.com
+      prefix: /
+      replacement: /
+    image:
+      tag: "1.1.2"
+      repository: harbor.services.mydomain.com/tap-apps

@@ -1,0 +1,10 @@
+apiVersion: services.apps.tanzu.vmware.com/v1alpha1
+kind: ClassClaim
+metadata:
+  name: psql-1
+  namespace: teal
+spec:
+  classRef:
+    name: postgresql-unmanaged
+  parameters:
+    storageGB: 5

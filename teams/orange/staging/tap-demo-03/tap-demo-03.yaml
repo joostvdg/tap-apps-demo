@@ -1,0 +1,23 @@
+apiVersion: carto.run/v1alpha1
+kind: Deliverable
+metadata:
+  name: tap-demo-03
+  labels:
+    app.kubernetes.io/part-of: tap-demo-03
+    apps.tanzu.vmware.com/auto-configure-actuators: "true"
+    apps.tanzu.vmware.com/has-tests: "true"
+    apps.tanzu.vmware.com/workload-type: web
+    kustomize.toolkit.fluxcd.io/name: orange
+    kustomize.toolkit.fluxcd.io/namespace: apps
+    app.kubernetes.io/component: deliverable
+    app.tanzu.vmware.com/deliverable-type: web
+    carto.run/cluster-template-name: external-deliverable-template
+    carto.run/resource-name: deliverable
+    carto.run/supply-chain-name: source-to-url
+    carto.run/template-kind: ClusterTemplate
+    carto.run/template-lifecycle: mutable
+    carto.run/workload-name: tap-demo-03
+    carto.run/workload-namespace: orange
+spec:
+  source:
+    image: harbor.services.mydomain.com/tap-apps/tap-demo-03-orange-bundle:7d661510-dda4-45a5-964a-378e8f3795c3

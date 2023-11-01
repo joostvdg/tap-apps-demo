@@ -1,0 +1,10 @@
+apiVersion: source.toolkit.fluxcd.io/v1beta2
+kind: HelmRepository
+metadata:
+  name: team-teal
+  namespace: teal
+spec:
+  interval: 5m
+  url: https://nexus.services.mydomain.com/repository/team-teal/
+  secretRef:
+    name: repo-auth

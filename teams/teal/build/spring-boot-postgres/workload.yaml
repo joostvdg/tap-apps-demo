@@ -1,0 +1,44 @@
+apiVersion: carto.run/v1alpha1
+kind: Workload
+metadata:
+  name: spring-boot-postgres
+  namespace: teal
+  labels:
+    apps.tanzu.vmware.com/workload-type: web
+    apps.tanzu.vmware.com/has-tests: "true"
+    apps.tanzu.vmware.com/auto-configure-actuators: "true"
+    app.kubernetes.io/part-of: spring-boot-postgres
+spec:
+  build:
+    env:
+      - name: BP_JVM_VERSION
+        value: "17"
+  params:
+    - name: annotations
+      value:
+        autoscaling.knative.dev/minScale: "1"
+    - name: api_descriptor
+      value:
+        type: openapi
+        location:
+          path: "/v3/api-docs"
+        system: spring-boot-postgres
+        owner: teal
+        description: "A set of API endpoints to manage the resources within the spring-boot-postgres app."
+    - name: gitops_ssh_secret
+      value: gitops-ssh
+    - name: gitops_team
+      value: teal
+    - name: gitops_env #! the next environment
+      value: staging
+  serviceClaims:
+    - name: db
+      ref:
+        apiVersion: services.apps.tanzu.vmware.com/v1alpha1
+        kind: ClassClaim
+        name: psql-1
+  source:
+    git:
+      url: http://gitlab.services.mydomain.com/root/spring-boot-postgres.git
+      ref:
+        branch: main
